@@ -4,7 +4,7 @@ const client = new Discord.Client();
 const PREFIX = '!';
 
 //{
-client.login('MzIxMTM1NDQwNzY3ODc3MTIw.DBjUzw.ASllLI32v2wTBuwB_EMskduVtJo', output);
+client.login(process.env.BOT_TOKEN, output);
 function output(error, token) {
     if (error) {
         console.log(`There was an error logging in: ${error}`);
