@@ -72,7 +72,6 @@ client.on('guildMemberAdd', (member) => {
     const guild = member.guild;
 
     guild.defaultChannel.send(`Aramıza hoşgeldin ${member.user}. Üye onayı almak için #yeni-kullanicilar kanalına göz at.`);
-    
 })
 
 //Sunucudan birisi ayrıldığında:
