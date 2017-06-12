@@ -1,0 +1,6 @@
+V 1.1.0
+    - Handlers moved to another module, so clean code is my girl.
+    - '!at' command translated to english as '!kick'.
+        + !kick command's notifications translated, too.
+    - nodemon installed locally. Check out package.json.
+    
