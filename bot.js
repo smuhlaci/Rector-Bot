@@ -16,16 +16,12 @@ bot = {
                 {
                     channel.send("Check out your PM.").then(msg => msg.delete(5000));
                     helpCommands(msg.member.user);
-                    //msg.member.user.createDM().then(dm => dm.send("pm"));
                     msg.delete(5000);
                 }
 
                 if (commandName === "role") {
 
-                    var AcceptedRoleIDs = ['322734984483962881',
-                        '322735296535855105',
-                        '322736357493702656',
-                        '322736135988314123'];
+                    var AcceptedRoleIDs = ['322734984483962881','322735296535855105','322736357493702656','322736135988314123'];
                     if(input.length == 0)
                     {
                         channel.send("You can choose these roles: @Coders, @Artists, @Designers and @Composers").
@@ -37,7 +33,9 @@ bot = {
                         let selectedRole = msg.mentions.roles.first();
 
                         if (selectedRole == null)
-                            channel.send("You didn't choose any Role.");
+                            channel.send("You didn't choose any Role.").then(
+                                msg => msg.delete(5000)
+                            )
                         else if(msg.member.roles.exists("id",selectedRole.id))
                             channel.send("You already have this role.").then(
                                 msg => msg.delete(5000)
@@ -138,7 +136,6 @@ bot = {
 function helpCommands(user)
 {
     user.createDM().then((pm) => {
-        console.log("sending pm");
         pm.send("  **General Commands**\n\n" +
             "**!ping** -- Pong!\n" +
             "**!pig** -- pig?\n" +

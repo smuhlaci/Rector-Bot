@@ -9,3 +9,5 @@ V 1.2.0
         + '!role add [@Role]' command is adding you an allowed role.
         + '!role remove [@Role]' command is removing any allowed role that you have.
     - Help command is active.
+V1.2.1
+    - FIXED: "You didn't choose any Role." message is not destroy itself.
