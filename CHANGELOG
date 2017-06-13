@@ -3,4 +3,9 @@ V 1.1.0
     - '!at' command translated to english as '!kick'.
         + !kick command's notifications translated, too.
     - nodemon installed locally. Check out package.json.
-    
+V 1.2.0
+    - Role functions are on your service.
+        + There are four allowed role: @Coders, @Artists, @Designers and @Composers.
+        + '!role add [@Role]' command is adding you an allowed role.
+        + '!role remove [@Role]' command is removing any allowed role that you have.
+    - Help command is active.
