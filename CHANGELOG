@@ -11,3 +11,9 @@ V 1.2.0
     - Help command is active.
 V1.2.1
     - FIXED: "You didn't choose any Role." message is not destroy itself.
+V 1.3.0 - 22-Jun-2017
+    - Design of code has been changed.
+    - !role command now mentions the roles.
+    - Welcome message mentions the channel.
+    - !github sends the GitHub repository's link.
+    - !exampleCode removed.
