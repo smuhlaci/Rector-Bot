@@ -14,7 +14,7 @@ function SetAnimatedMessage(msg, animation)
 {
 	var newAnimatedMessage = new AnimatedMessage(msg, animation);
 	animatedMessages.push(newAnimatedMessage);
-	console.log("Set up a new animated message.");
+	console.log("Set up a new animated message.").then(msg => msg.delete(5000));
 }
 
 class AnimatedMessage
@@ -88,16 +88,16 @@ function ProcessAnimationCommand(message)
 
 		if(Animations.hasOwnProperty(animationName))
 		{
-			message.channel.send("Animation already exists.");
+			message.channel.send("Animation already exists.").then(msg => msg.delete(5000));
 		}
 		else
 		{
 			Animations[animationName] = {};
 			Animations[animationName].owner = message.author.id;
 			Animations[animationName].animationData = [];
-			fs.writeFile('./Animations.json', JSON.stringify(Animations), console.error);	
+			fs.writeFile('./Libraries/Storage/Animations.json', JSON.stringify(Animations), console.error);	
 
-			message.channel.send(`Created animation **${animationName}** succesfully.`);
+			message.channel.send(`Created animation **${animationName}** succesfully.`).then(msg => msg.delete(5000));
 			return;
 		}
 	}
@@ -119,8 +119,8 @@ function ProcessAnimationCommand(message)
 						var frameData = message.content.substring(substringID);
 
 						Animations[animationName].animationData.push(frameData);
-						fs.writeFile('./Animations.json', JSON.stringify(Animations), console.error);	
-						message.channel.send("Added frame succesfully.");
+						fs.writeFile('./Libraries/Storage/Animations.json', JSON.stringify(Animations), console.error);	
+						message.channel.send("Added frame succesfully.").then(msg => msg.delete(5000));
 						return;
 					}
 					if(frameNumber == "addMultiple")
@@ -133,8 +133,8 @@ function ProcessAnimationCommand(message)
 						{
 							Animations[animationName].animationData.push(frames[i]);
 						}
-						fs.writeFile('./Animations.json', JSON.stringify(Animations), console.error);
-						message.channel.send("Added frames succesfully.");
+						fs.writeFile('./Libraries/Storage/Animations.json', JSON.stringify(Animations), console.error);
+						message.channel.send("Added frames succesfully.").then(msg => msg.delete(5000));
 						return;
 					}
 					else
@@ -146,37 +146,37 @@ function ProcessAnimationCommand(message)
 								var substringID = 18 + animationName.length + stringLength;
 								var frameData = message.content.substring(substringID);
 								Animations[animationName].animationData[frameNumber - 1] = frameData;
-								fs.writeFile('./Animations.json', JSON.stringify(Animations), console.error);
-								message.channel.send("Edited frame succesfully.");
+								fs.writeFile('./Libraries/Storage/Animations.json', JSON.stringify(Animations), console.error);
+								message.channel.send("Edited frame succesfully.").then(msg => msg.delete(5000));
 								return;
 							}
 							else
 							{
-								message.channel.send(`Animation does not have frame **${frameNumber}**.`);
+								message.channel.send(`Animation does not have frame **${frameNumber}**.`).then(msg => msg.delete(5000));
 								return;
 							}
 						}
 						else
 						{
-							message.channel.send("Incorrect number.");
+							message.channel.send("Incorrect number.").then(msg => msg.delete(5000));
 							return;
 						}
 					}
 				}
 				else
 				{
-					message.channel.send("You do not own this animation.");
+					message.channel.send("You do not own this animation.").then(msg => msg.delete(5000));
 					return
 				}
 			}
 			else
 			{
-				message.channel.send("You didnt specify editing parameters.");
+				message.channel.send("You didnt specify editing parameters.").then(msg => msg.delete(5000));
 			}
 		}
 		else
 		{
-			message.channel.send("Animation not found.");
+			message.channel.send("Animation not found.").then(msg => msg.delete(5000));
 			return;
 		}
 	}
@@ -185,12 +185,20 @@ function ProcessAnimationCommand(message)
 		let animationName = messageSplit[2];
 		if(Animations.hasOwnProperty(animationName))
 		{
-			SetupAnimatedMessage(message.channel, Animations[animationName].animationData);
+			if(Animations[animationName].animationData == null || Animations[animationName].animationData.length == 0)
+			{
+				message.channel.send("Cannot play empty animation. Perhaps you should add frames to it.").then(msg => msg.delete(5000));
+				return;
+			}
+			else
+			{
+				SetupAnimatedMessage(message.channel, Animations[animationName].animationData);
+			}
 			//message.delete();
 		}
 		else
 		{
-			message.channel.send("Animation not found.");
+			message.channel.send("Animation not found.").then(msg => msg.delete(5000));
 		}
 	}
 	else if(messageSplit[1] === "info")
@@ -209,11 +217,11 @@ function ProcessAnimationCommand(message)
 				finalString += `\n**[Frame ${i+1}]**\n-\n${data[i]}\n-`;
 			}
 
-			message.channel.send(finalString);
+			message.channel.send(finalString).then(msg => msg.delete(5000));
 		}
 		else
 		{
-			message.channel.send("Animation not found.");
+			message.channel.send("Animation not found.").then(msg => msg.delete(5000));
 		}		
 	}
 	else if(messageSplit[1] === "help")
@@ -237,15 +245,23 @@ function ProcessAnimationCommand(message)
 	else if(messageSplit[1] === "list")
 	{
 		var keys = Object.keys(Animations);
-		var messageText = "-";
-		for (var i = 0; i < keys.length; i++)
+		if(keys.length > 0)
 		{
-			messageText += "\n"+"**"+keys[i]+"**";
-		}
+			var messageText = "-";
+			for (var i = 0; i < keys.length; i++)
+			{
+				messageText += "\n"+"**"+keys[i]+"**";
+			}
 
-		messageText += "\n-\nYou can do `%animation play animationName` to play animations.";
-		message.channel.send(messageText);
-		return;
+			messageText += "\n-\nYou can do `%animation play animationName` to play animations.";
+			message.channel.send(messageText).then(msg => msg.delete(10000));
+			return;
+		}
+		else
+		{
+			message.channel.send("There aren't any animations. Check **%animation help** to learn how to create one.").then(msg => msg.delete(8000));
+			return;
+		}
 	}
 	else if(messageSplit[1] === "delete")
 	{
@@ -255,24 +271,24 @@ function ProcessAnimationCommand(message)
 			if(Animations[animationName].owner == message.author.id)
 			{
 				delete Animations[animationName];
-				fs.writeFile('./Animations.json', JSON.stringify(Animations), console.error);
-				message.channel.send("Animation removed succesfully.");
+				fs.writeFile('./Libraries/Storage/Animations.json', JSON.stringify(Animations), console.error);
+				message.channel.send("Animation removed succesfully.").then(msg => msg.delete(5000));
 				return;
 			}
 			else
 			{
-				message.channel.send("Only the owner can remove this animation.");
+				message.channel.send("Only the owner can remove this animation.").then(msg => msg.delete(5000));
 				return;
 			}
 		}
 		else
 		{
-			message.channel.send("Animation not found.");
+			message.channel.send("Animation not found.").then(msg => msg.delete(5000));
 		}		
 	}
 	else
 	{
-		message.channel.send("Command not found.");
+		message.channel.send("Command not found.").then(msg => msg.delete(5000));
 		return;
 	}
 }

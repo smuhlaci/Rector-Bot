@@ -34,7 +34,7 @@ let AllowedRoles = sequelize.define('allowedRoles', {
 if (process.env.BOT_TOKEN === 'NOTOKEN')
     console.error('Change your token settings from .env file. You need to put your private token.');
 else
-    client.login(process.env.BOT_TOKEN);
+    client.login("process.env.BOT_TOKEN");
 
 
 client.on('ready', () => {
