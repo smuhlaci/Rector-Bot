@@ -235,16 +235,17 @@ client.on('guildMemberRemove', (member) => {
 
 function helpCommands(user) {
     user.createDM().then((pm) => {
-        pm.send("  **General Commands**\n\n" +
-            "**!ping** -- Pong!\n" +
-            "**!pig** -- pig?\n" +
-            "**!help** -- Guess what?\n" +
-            "**!role** -- Shows allowed roles.\n" +
-            "   !role add [@Role] -- Take an allowed role yourself.\n" +
-            "   !role remove [@Role] -- Remove an allowed role that you have.\n" +
-        "  **Developer Commands**\n\n" +
-            "**!roleid [@Role]** -- Shows the role's ID\n" +
-            "**!github** -- Sends GitHub repository link");
+        pm.send("-\n"+
+            "**General Commands**\n\n" +
+            "  **!ping** -- Pong!\n" +
+            "  **!pig** -- pig?\n" +
+            "  **!help** -- Guess what?\n" +
+            "  **!role** -- Shows allowed roles.\n" +
+            "     !role add [@Role] -- Take an allowed role yourself.\n" +
+            "     !role remove [@Role] -- Remove an allowed role that you have.\n\n" +
+            "**Developer Commands**\n\n" +
+            "  **!roleid [@Role]** -- Shows the role's ID\n" +
+            "  **!github** -- Sends GitHub repository link");
     }
     );
 }
