@@ -14,7 +14,7 @@ function SetAnimatedMessage(msg, animation)
 {
 	var newAnimatedMessage = new AnimatedMessage(msg, animation);
 	animatedMessages.push(newAnimatedMessage);
-	console.log("Set up a new animated message.").then(msg => msg.delete(5000));
+	console.log("Set up a new animated message.");
 }
 
 class AnimatedMessage
