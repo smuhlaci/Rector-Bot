@@ -1,32 +1,28 @@
 const Discord = require("discord.js");
-const sql = require("sqlite");
+const mysql = require('mysql2');
 const Sequelize = require('sequelize');
 const client = new Discord.Client();
 
 const PREFIX = '!';
 const REPLY_DURATION = 5000;
 
-let sequelize = new Sequelize('database', 'username', 'password', {
-    host: 'localhost',
-    dialect: 'sqlite',
-    // SQLite only
-    storage: 'database.sqlite'
-});
+//DATABASE HERE ->
+const sequelize = new Sequelize(process.env.DATABASE_URL);
 
 let AllowedRoles = sequelize.define('allowedRoles', {
-    roleId: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false
-    },
-    name: {
-        type: Sequelize.STRING,
-        unique: true
-    }
+  roleId: {
+      type: Sequelize.STRING,
+      unique: true,
+      allowNull: false
+  },
+  name: {
+      type: Sequelize.STRING,
+      unique: true
+  }
 });
 
-//LOGIN HERE:
-if (process.env.BOT_TOKEN === 'NOTOKEN')
+//LOGIN HERE ->
+if (process.env.BOT_TOKEN === 'NULL')
     console.error('Change your token settings from .env file. You need to put your private token.');
 else
     client.login(process.env.BOT_TOKEN);
@@ -35,6 +31,13 @@ else
 client.on('ready', () => {
     console.log('I am ready!');
     //Sync Database.
+    sequelize.authenticate()
+        .then(() => {
+            console.log('Connection has been established successfully.');
+        })
+        .catch(err => {
+            console.error('Unable to connect to the database:', err);
+        });
     AllowedRoles.sync();
 });
 //LOGIN END 
@@ -46,23 +49,14 @@ client.on('message', async msg => {
     if (cont.startsWith(PREFIX)) {
         let input = cont.slice(PREFIX.length).split(" ");
         let commandName = input.shift();
-        let commandArgs = input.join(" ");
 
-        if (commandName === "help") {
-            channel.send("Check out your PM.").then(msg => msg.delete(REPLY_DURATION));
-            helpCommands(msg.member.user);
-            msg.delete(REPLY_DURATION);
-        }
-
-        else if (commandName === "roleSet") {
+        if (commandName === "roleSet") {
             msg.delete(REPLY_DURATION);
             if (msg.member.permissions.has('MANAGE_ROLES')) {
                 if (input.length === 0) {
                     //C#'da yazsam burayı methodun içerisine koymakla kalmaz bu tür methodları yazdığım bir sınıf oluştururdum.
                     //Java'da nasıl oluyor çözemedim -Sercan.
 
-                    msg.delete(REPLY_DURATION);
-                    // SELECT name FROM tags ...
                     let roleList = await AllowedRoles.findAll({ attributes: ['roleId'] });
 
                     if (roleList.length < 1) {
@@ -96,8 +90,6 @@ client.on('message', async msg => {
                                 channel.send(e);
                             }
                         });
-
-                    msg.delete(REPLY_DURATION);
                 }
                 else if (input[0] === "remove") {
                     let selectedRole = msg.mentions.roles.first();
@@ -114,8 +106,6 @@ client.on('message', async msg => {
                     console.log(rowCount);
                     if (rowCount) channel.send("Role removed.").then(msg => msg.delete(REPLY_DURATION));
                     else channel.send("That role did not exist.").then(msg => msg.delete(REPLY_DURATION));
-
-                    msg.delete(REPLY_DURATION);
                 }
                 else channel.send("Invalid command.").then(msg => msg.delete(REPLY_DURATION));
 
@@ -128,8 +118,7 @@ client.on('message', async msg => {
             msg.delete(REPLY_DURATION);
             // SELECT name FROM tags ...
             let roleList = await AllowedRoles.findAll({ attributes: ['roleId'] });
-            console.log(roleList.map(t => t.roleId));
-            //var AcceptedRoleIDs = ['322734984483962881', '322735296535855105', '322736357493702656', '322736135988314123'];
+
             if (input.length == 0) {
                 //C#'da yazsam burayı methodun içerisine koymakla kalmaz bu tür methodları yazdığım bir sınıf oluştururdum.
                 //Java'da nasıl oluyor çözemedim -Sercan.
@@ -190,6 +179,12 @@ client.on('message', async msg => {
 
         }
 
+        else if (commandName === "help") {
+            channel.send("Check out your PM.").then(msg => msg.delete(REPLY_DURATION));
+            helpCommands(msg.member.user);
+            msg.delete(REPLY_DURATION);
+        }
+
         else if (commandName === "ping") {
             channel.send('pong! :ping_pong:');
         }
@@ -218,7 +213,7 @@ client.on('message', async msg => {
             }
         }
 
-        else if(commandName === "github"){
+        else if (commandName === "github") {
             channel.send("Check it out: https://github.com/smuhlaci/Rector-Bot");
         }
     }
@@ -246,9 +241,10 @@ function helpCommands(user) {
             "**!help** -- Guess what?\n" +
             "**!role** -- Shows allowed roles.\n" +
             "   !role add [@Role] -- Take an allowed role yourself.\n" +
-            "   !role remove [@Role] -- Remove an allowed role that you have.\n");
-        pm.send("  **Developer Commands**\n\n" +
-            "**!roleid [@Role]** -- Shows the role's ID\n");
+            "   !role remove [@Role] -- Remove an allowed role that you have.\n" +
+        "  **Developer Commands**\n\n" +
+            "**!roleid [@Role]** -- Shows the role's ID\n" +
+            "**!github** -- Sends GitHub repository link");
     }
     );
 }
