@@ -3,7 +3,11 @@ const mysql = require('mysql2');
 const Sequelize = require('sequelize');
 const client = new Discord.Client();
 
+const Promise = require("./Libraries/bluebird.js");
+const Animation = require('./Libraries/animation');
+
 const PREFIX = '!';
+const ANIMATION_PREFIX = "%";
 const REPLY_DURATION = 5000;
 
 //DATABASE HERE ->
@@ -20,6 +24,7 @@ let AllowedRoles = sequelize.define('allowedRoles', {
       unique: true
   }
 });
+
 
 //LOGIN HERE ->
 if (process.env.BOT_TOKEN === 'NULL')
@@ -39,6 +44,10 @@ client.on('ready', () => {
             console.error('Unable to connect to the database:', err);
         });
     AllowedRoles.sync();
+
+	//start the clock that manages the animations
+    var clockTick = new TickClock();
+	clockTick.BeginLoop();
 });
 //LOGIN END 
 
@@ -217,6 +226,14 @@ client.on('message', async msg => {
             channel.send("Check it out: https://github.com/smuhlaci/Rector-Bot");
         }
     }
+    else if(cont.startsWith(ANIMATION_PREFIX)){
+        let messageSplit =  cont.split(" ");
+        let commandName = messageSplit[0].substring(1);
+        if(commandName == "animation"){
+            Animation.ProcessAnimationCommand(msg);
+        }
+    }
+
 });
 
 //Yeni birisi sunucuya katıldığında:
@@ -249,3 +266,22 @@ function helpCommands(user) {
     }
     );
 }
+
+function Tick(){
+	Animation.ProcessAnimatedMessages();
+}
+
+var tickLength = 200;
+var clockShouldRun = true;
+//Her tickLength milisaniyede bir Tick() fonksiyonunu çağıran bir coroutine.
+//Başka rutin olarak çalışması gereken kod tick fonksiyonu içine yazılabilir.
+function TickClock(){}
+TickClock.prototype.BeginLoop = Promise.coroutine(function*(){
+	while(clockShouldRun){
+		Tick();
+		yield Promise.delay(tickLength);
+	}
+});
+
+
+

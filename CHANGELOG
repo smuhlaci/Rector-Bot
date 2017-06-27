@@ -21,3 +21,16 @@ V 1.3.1 - 27 Jun 2017
     - Project turned to ClearDB with MySQL solution because of Hereoku.
     - !help command's reply updated.
     - FIXED: Promise handle exception, error.
+V 1.3.2 - 27 Jun 2017
+	- Implemented the animation system and its commands.
+		+ Do %animation help while running to also get the commands for animation.
+		+ %animation create animationName: Creates an animation with the name animationName.
+		+ %animation edit animationName add framePicture:` Adds a new frame with the framePicture to the animation called animationName.
+		+ %animation edit animationName addMultiple frame1;frame2;frame3...: Adds frames seperated with ";" to the animation called animationName.
+		+ %animation edit animationName frameNumber framePicture: Edits the animation called animationName on the frame frameNumber.
+		+ %animation info animationName: Displays the frames of the animation animationName.
+		+ %animation play animationName:` Plays the animation called animationName.
+		+ %animation list: Lists all the animations.
+	- Added the promise library Bluebird for running the clock that manages the animations.
+		+ No need to install anything manually since it works using bluebird.js under "./Libraries".
+		+ The clock can also be used for running other code that has to be executed every "x" milliseconds.
