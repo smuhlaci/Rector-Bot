@@ -206,7 +206,6 @@ client.on('message', async msg => {
             channel.send(msg.mentions.roles.first().id);
         }
 
-        //Sunucudan birisini atma komutu:
         else if (commandName === "kick") {
 
             if (msg.member.roles.exists("id", '288244917367734273')) {
@@ -236,14 +235,12 @@ client.on('message', async msg => {
 
 });
 
-//Yeni birisi sunucuya katıldığında:
 client.on('guildMemberAdd', (member) => {
     const guild = member.guild;
 
-    guild.defaultChannel.send(`Aramıza hoşgeldin ${member.user}. Üye onayı almak için <#yeni-kullanicilar> kanalına göz at.`);
+    guild.defaultChannel.send(`Aramıza hoşgeldin ${member.user}. Üye onayı almak için <#321012534477979648> kanalına göz at.`);
 })
 
-//Sunucudan birisi ayrıldığında:
 client.on('guildMemberRemove', (member) => {
     const guild = member.guild;
 
