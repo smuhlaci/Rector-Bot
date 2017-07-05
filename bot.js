@@ -235,16 +235,20 @@ client.on('message', async msg => {
 
 });
 
+let WelcomeMessageChannelID = '331714238148116480';
 client.on('guildMemberAdd', (member) => {
-    const guild = member.guild;
-
-    guild.defaultChannel.send(`Aramıza hoşgeldin ${member.user}. Üye onayı almak için <#321012534477979648> kanalına göz at.`);
+    const channel = member.guild.channels.get(WelcomeMessageChannelID);
+    channel.send(`Aramıza hoşgeldin ${member.user}. Onay almak için <#321012534477979648> kanalına göz at.`);
+    member.createDM().then((pm) => {
+        pm.send("Sunucuya !help yazarak kullanabileceğin komutlara erişim sağlayabilirsin.\n" +
+                "#merhaba kanalına kendini veya projeni tanıtan bir paragraf yazabilirsin."+ 
+                "Tabii hepsinden önce facebook grubumuzda olduğunu onaylatman gerekiyor. Grup yöneticisine facebook hesabınla Discord ismini mesaj atman yeterli!")
+    })
 })
 
 client.on('guildMemberRemove', (member) => {
-    const guild = member.guild;
-
-    guild.defaultChannel.send(`${member.user} çıktı.`);
+    const channel = member.guild.channels.get(WelcomeMessageChannelID);
+    channel.send(`${member.user} çıktı.`);
 })
 
 function helpCommands(user) {
@@ -260,8 +264,7 @@ function helpCommands(user) {
             "**Developer Commands**\n\n" +
             "  **!roleid [@Role]** -- Shows the role's ID\n" +
             "  **!github** -- Sends GitHub repository link");
-    }
-    );
+    });
 }
 
 function Tick(){
