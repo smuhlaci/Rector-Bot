@@ -11,7 +11,34 @@ const ANIMATION_PREFIX = "%";
 const REPLY_DURATION = 5000;
 
 //DATABASE HERE ->
-const sequelize = new Sequelize(process.env.DATABASE_URL);
+var dialect = process.env.DIALECT;
+
+//Use a different database depending on dialect for easy local use
+var sequelize;
+if(dialect === "mysql") {
+    sequelize = new Sequelize(process.env.DATABASE_URL);
+}
+else if(dialect === "sqlite") {
+    sequelize = new Sequelize('database', null, null, {
+    host: 'localhost',
+    dialect: 'sqlite',
+    
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+    },
+    
+    // SQLite only
+    storage: './Libraries/Storage/LocalDatabase.db'
+    ,
+    
+    // http://docs.sequelizejs.com/manual/tutorial/querying.html#operators
+    operatorsAliases: false
+    });
+}
+
 
 let AllowedRoles = sequelize.define('allowedRoles', {
   roleId: {
