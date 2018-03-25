@@ -1,8 +1,31 @@
 const fs = require("fs");
+const Promise = require("./bluebird.js");
 let Animations = JSON.parse(fs.readFileSync('./Libraries/Storage/Animations.json', 'utf8'));
 
 var animatedMessages = new Array();
 var animationLoopCount = 3;
+
+function StartClock()
+{
+    var clockTick = new TickClock();
+	clockTick.BeginLoop();
+}
+
+function Tick(){
+	ProcessAnimatedMessages();
+}
+
+var tickLength = 200;
+var clockShouldRun = true;
+//Her tickLength milisaniyede bir Tick() fonksiyonunu çağıran bir coroutine.
+//Başka rutin olarak çalışması gereken kod tick fonksiyonu içine yazılabilir.
+function TickClock(){}
+TickClock.prototype.BeginLoop = Promise.coroutine(function*(){
+	while(clockShouldRun){
+		Tick();
+		yield Promise.delay(tickLength);
+	}
+});
 
 //Hareketli mesajı oluşturup arraya ekleyen ana fonksiyon, animation parametresi teker teker kareleri içeren bir string arrayi
 function SetupAnimatedMessage(channel, animation)
@@ -293,6 +316,7 @@ function ProcessAnimationCommand(message)
 	}
 }
 
+exports.StartClock = StartClock;
 exports.ProcessAnimatedMessages = ProcessAnimatedMessages;
 exports.ProcessAnimationCommand =  ProcessAnimationCommand;
 exports.animatedMessages = animatedMessages;
