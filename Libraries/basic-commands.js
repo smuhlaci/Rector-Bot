@@ -1,18 +1,28 @@
 const Discord = require("discord.js");
 
+function getRole(roleInput, channel) {
+    if(roleInput == null)
+        return null;
+    //Sırasıyla mention, ID ve roleİsmi kombinasyonlarını deneyeceğiz. -Mert
+    return channel.guild.roles.find(role => role.toString() === roleInput)
+        || channel.guild.roles.find(role => role.id === roleInput) 
+        || channel.guild.roles.find(role => role.name.toLowerCase() === roleInput.toLowerCase());
+    
+}
+
 async function RunCommand(msg, channel)
 {
     let input = msg.content.slice(PREFIX.length).split(" ");
     let commandName = input.shift().toLowerCase();
     
-    if (commandName === "roleSet") {
+    if (commandName === "roleset") {
         msg.delete(REPLY_DURATION);
         if (msg.member.permissions.has('MANAGE_ROLES')) {
             if (input.length === 0) {
                 //C#'da yazsam burayı methodun içerisine koymakla kalmaz bu tür methodları yazdığım bir sınıf oluştururdum.
                 //Java'da nasıl oluyor çözemedim -Sercan.
 
-                let roleList = await AllowedRoles.findAll({ attributes: ['roleId'] });
+                let roleList = await AllowedRoles.findAll({ attributes: ['name'] });
 
                 if (roleList.length < 1) {
                     channel.send('No role set.').then(msg => msg.delete(REPLY_DURATION));
@@ -20,12 +30,13 @@ async function RunCommand(msg, channel)
                 }
 
                 let result = 'Allowed roles are: ';
-                result += roleList.map(t => t.roleId = `<@&${t.roleId}>`).join(', ') + ".";
+                result += roleList.map(t => t.name = `@${t.name}`).join(', ') + ".";
 
                 channel.send(result).then(msg => msg.delete(REPLY_DURATION));
             }
             else if (input[0] === "add") {
-                let selectedRole = msg.mentions.roles.first();
+                let roleInput = input[1];
+                let selectedRole = getRole(roleInput, channel);
 
                 if (selectedRole == null) {
                     channel.send("You didn't choose any Role.").then(
@@ -47,7 +58,8 @@ async function RunCommand(msg, channel)
                     });
             }
             else if (input[0] === "remove") {
-                let selectedRole = msg.mentions.roles.first();
+                let roleInput = input[1];
+                let selectedRole = getRole(roleInput, channel);
 
                 if (selectedRole == null) {
                     channel.send("You didn't choose any Role.").then(
@@ -72,7 +84,7 @@ async function RunCommand(msg, channel)
 
         msg.delete(REPLY_DURATION);
         // SELECT name FROM tags ...
-        let roleList = await AllowedRoles.findAll({ attributes: ['roleId'] });
+        let roleList = await AllowedRoles.findAll({ attributes: ['roleId', 'name'] });
 
         if (input.length == 0) {
             //C#'da yazsam burayı methodun içerisine koymakla kalmaz bu tür methodları yazdığım bir sınıf oluştururdum.
@@ -84,13 +96,14 @@ async function RunCommand(msg, channel)
             }
 
             let result = 'Allowed roles are: ';
-            result += roleList.map(t => t.roleId = `<@&${t.roleId}>`).join(', ') + ".";
+            result += roleList.map(t => t.name = `@${t.name}`).join(', ') + ".";
 
             channel.send(result).then(msg => msg.delete(REPLY_DURATION));
         } else
 
             if (input[0] === "add") {
-                let selectedRole = msg.mentions.roles.first();
+                let roleInput = input[1];
+                let selectedRole = getRole(roleInput, channel);
 
                 if (selectedRole == null)
                     channel.send("You didn't choose any Role.").then(
@@ -110,7 +123,8 @@ async function RunCommand(msg, channel)
                 else channel.send("You can't take this role :thumbsdown:").then(msg => msg.delete(REPLY_DURATION));
 
             } else if (input[0] === "remove") {
-                let selectedRole = msg.mentions.roles.first();
+                let roleInput = input[1];
+                let selectedRole = getRole(roleInput, channel);
 
                 if (selectedRole == null)
                     channel.send("Are you trying to remove nothing? :frowning:");
