@@ -1,0 +1,19 @@
+Basic Commands
+---------
+//Also add role commands here
+!help
+!ping
+!pig
+!roleid
+!kick
+!github
+
+Animation
+---------
+%animation create animationName
+%animation edit animationName add framePicture
+%animation edit animationName addMultiple frame1;frame2;frame3...
+%animation edit animationName frameNumber framePicture
+%animation info animationName
+%animation list
+
