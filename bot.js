@@ -5,29 +5,34 @@ const client = new Discord.Client();
 const Animation = require('./Libraries/animation');
 const BasicCommands = require('./Libraries/basic-commands.js');
 const Database = require('./Libraries/database.js');
+const LoginScheduler = require('./Libraries/login_scheduler.js');
 
 //Global variables
 PREFIX = '!';
 ANIMATION_PREFIX = "%";
 REPLY_DURATION = 5000;
+CLIENT_LOGGED_IN = false;
 
 //Initialize Database
 Database.Initialize();
 
 //LOGIN HERE ->
-if (process.env.BOT_TOKEN === 'NULL')
-    console.error('Change your token settings from .env file. You need to put your private token.');
-else
-    client.login(process.env.BOT_TOKEN);
+LoginScheduler.Login(client);
+
 
 client.on('ready', () => {
-    console.log('I am ready!');
+    //Update the login flag and stop the login timer
+    console.log('Logged in succesfully.');
+    CLIENT_LOGGED_IN = true;
+    LoginScheduler.StopScheduler();
     
     //Sync Database.
     Database.Authenticate();
 
 	//start the clock that manages the animations
     Animation.StartClock();
+
+    console.log('I am ready!');
 });
 
 client.on('message', async message => {

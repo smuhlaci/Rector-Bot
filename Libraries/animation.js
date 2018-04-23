@@ -5,6 +5,8 @@ let Animations = JSON.parse(fs.readFileSync('./Libraries/Storage/Animations.json
 var animatedMessages = new Array();
 var animationLoopCount = 3;
 
+var animationSleepTime = 950;
+
 function StartClock()
 {
     var clockTick = new TickClock();
@@ -46,7 +48,7 @@ class AnimatedMessage
 	{
 		this.animationArray = animation;
 		this.message = message;
-		this.sleepTime = sleepTime;
+		this.sleepTime = animationSleepTime;
 		
 		this.currentFrame = 0;
 		this.stepping = false;
@@ -108,6 +110,11 @@ function ProcessAnimationCommand(message)
 	if(messageSplit[1] === "create")
 	{
 		let animationName = messageSplit[2];
+		if(animationName == null)
+		{
+			message.channel.send(`Cannot create animation without a name.`);
+			return;
+		}
 
 		if(Animations.hasOwnProperty(animationName))
 		{
