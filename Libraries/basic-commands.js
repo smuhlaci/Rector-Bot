@@ -210,3 +210,4 @@ function OnGuildMemberRemove(member)
 
 exports.RunCommand = RunCommand;
 exports.OnGuildMemberAdd = OnGuildMemberAdd;
+exports.OnGuildMemberRemove = OnGuildMemberRemove;
