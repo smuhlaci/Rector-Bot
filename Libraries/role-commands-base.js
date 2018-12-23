@@ -31,7 +31,11 @@ async function ProcessComand(message)
     
     if( !(commandName in commands) )
     {
-        await message.channel.send("Unknown command. Check **!rolehelp** for list of available commands.");
+        //Normally it should let the user know there is a help command for all the role commands.
+        //However since there are other commands distributed through ./basic-commands we don't know if the user has called a command.
+        //In the future the basic commands should be moved here or to a central command module for checking.
+
+        //await message.channel.send("Unknown command. Check **!rolehelp** for list of available commands.");
         return;
     }
     else
