@@ -1,6 +1,6 @@
 Basic Commands
 ---------
-//Also add role commands here
+//Also add basic role commands here
 !help
 !ping
 !pig
@@ -8,12 +8,10 @@ Basic Commands
 !kick
 !github
 
-Animation
+Role Commands
 ---------
-%animation create animationName
-%animation edit animationName add framePicture
-%animation edit animationName addMultiple frame1;frame2;frame3...
-%animation edit animationName frameNumber framePicture
-%animation info animationName
-%animation list
-
+!verify @user name
+!ignore @user reason
+!removeignore @user
+!rolehelp
+!verified
