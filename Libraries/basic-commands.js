@@ -179,8 +179,8 @@ function OnGuildMemberAdd(member)
     channel.send(`Aramıza hoşgeldin ${member.user}. Onay almak için <#321012534477979648> kanalına göz at.`);
     member.createDM().then((pm) => {
         pm.send("Sunucuya !help yazarak kullanabileceğin komutlara erişim sağlayabilirsin.\n" +
-                "#merhaba kanalına kendini veya projeni tanıtan bir paragraf yazabilirsin."+ 
-                "Tabii hepsinden önce facebook grubumuzda olduğunu onaylatman gerekiyor. Grup yöneticisine facebook hesabınla Discord ismini mesaj atman yeterli!")
+                "#merhaba kanalına kendini veya projeni tanıtan bir paragraf yazmayı unutma."+ 
+                "Tabii hepsinden önce facebook grubumuzda olduğunu onaylatman gerekiyor. https://unoghub.org/form adresinden forma ulaşabilirsin. Herhangi bir sorun yaşarsan lütfen https://unoghub.org/facebook sayfasına mesaj veya bilgi@unoghub.org adresine e-posta gönder.")
     })
 }
 
@@ -191,6 +191,7 @@ function helpCommands(user) {
             "  **!ping** -- Pong!\n" +
             "  **!pig** -- pig?\n" +
             "  **!help** -- Guess what?\n" +
+            "  **!verified** -- Shows current user count.\n" +
             "  **!role** -- Shows allowed roles.\n" +
             "     !role add _Role_ -- Take an allowed role yourself.\n" +
             "     !role remove _Role_ -- Remove an allowed role that you have.\n\n" +

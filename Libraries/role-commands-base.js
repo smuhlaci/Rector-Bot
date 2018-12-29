@@ -19,7 +19,7 @@ var commands =
         command:Commands.RemoveIgnore
     },
     rolehelp: {
-        permissions:['287963427362832386'],
+        permissions:['288244917367734273'],
         command:Commands.RoleHelp
     }
 }
